@@ -77,13 +77,13 @@ class BotStatisticsAdmin(admin.ModelAdmin):
 class CommandUsageAdmin(admin.ModelAdmin):
 	list_display = ['command', 'usage_count', 'last_used']
 	list_filter = ['last_used']
-	search_fields = [command']
+	search_fields = ['command']
 	readonly_fields = ['last_used']
 
 	def changelist_view(self, request, extra_context = None):
 		extra_context = extra_context or {}
 
-		top_commands = CommandUsage.objects.order_bu('-usage_count)[:10]
+		top_commands = CommandUsage.objects.order_by('-usage_count')[:10]
 		extra_context['chart_data'] = {
 			'labels': [cmd.command for cmd in top_commands],
 			'data': [cmd.usage_count for cmd in top_commands]

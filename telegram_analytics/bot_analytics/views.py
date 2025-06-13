@@ -3,8 +3,8 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from django.contrib.admin.views.decorators import staff_memeber_required
-from django.db.moduls import Count
+from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models import Count
 from datetime import date, timedelta
 from .models import TelegramUser, UserInteraction, BotStatistics
 from .bot import bot_instance

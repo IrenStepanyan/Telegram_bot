@@ -9,7 +9,7 @@ from .models import TelegramUser, UserInteraction, BotStatistics, CommandUsage
 from django.db.models import F
 from datetime import date
 
-logging.basicConfid(
+logging.basicConfig(
 	format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
 	#defines how each log message will look
 	#asctime -> timestamp of the log 
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 class TelegramBotAnalytics:
 	def __init__(self):
 		self.application = Application.builder().token(settings.TELEGRAM_BOT_TOKEN).build()
-		self.setuu_handlers()
+		self.setup_handlers()
 	
 	def setup_handlers(self):
 		self.application.add_handler(CommandHandler("start", self.start_command))
@@ -106,7 +106,7 @@ class TelegramBotAnalytics:
 	async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
 		user = await self.get_or_create_user(update)
 		await self.log_interaction(user, 'start', command = 'start')
-		awair self.update_command_usage('start')
+		await self.update_command_usage('start')
 
 		keyboard = [
 			[InlineKeyboardButton("My stats", callback_data = 'my_stats')],
@@ -120,7 +120,7 @@ class TelegramBotAnalytics:
 
 		await update.message.repy_text(welcome_text, reply_markup = reply_markup)
 
-	async def help_command(self, update: Update, context = ContextType.DEFAULT_TYPE):
+	async def help_command(self, update: Update, context = ContextTypes.DEFAULT_TYPE):
 		user = await self.get_or_create_user(update)
 		await self.log_interaction(user, 'command', command = 'help')
 		await self.update_command_usage('help')
@@ -143,10 +143,10 @@ class TelegramBotAnalytics:
 		"""
 		await update.message.reply_text(help_text, parse_mode = "Markdown")
 	
-	async def stats_command(self, update: Update, context = ContextType = DEFAULT_TYPE):
+	async def stats_command(self, update: Update, context = ContextTypes.DEFAULT_TYPE):
 		user = await self.get_or_create_user(update)
 		await self.log_interaction(user, 'command', command = 'stats')
-		awair self.update_command_usage('stats')
+		await self.update_command_usage('stats')
 
 		total_interactions = user.interactions.count()
 		messages_count = user.interactions.filter(interaction_type= 'message').count()
@@ -184,9 +184,9 @@ class TelegramBotAnalytics:
 		elif query.data == 'help':
 			await self.help_command(update, context)
 
-		awair query.answer()
+		await query.answer()
 
-	async def handle_message(self, update: Update, context: ContextType.DEFAULT_TYPE):
+	async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
 		#handls normal messages 
 		user = await self.get_or_create_user(update)
 		await self.log_interaction(
@@ -199,7 +199,7 @@ class TelegramBotAnalytics:
 		response += f"Message received at: {timezone.now().strftime('%H:%M:%S')}\n" 
 		response += f"Your message count: {user.interactions.filter(interaction_type='message').count()}"
 
-		awair update.message.reply_text(response)
+		await update.message.reply_text(response)
 
 #init bot instance
 bot_instance = TelegramBotAnalytics()

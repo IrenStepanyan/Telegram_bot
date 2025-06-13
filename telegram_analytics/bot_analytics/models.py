@@ -3,14 +3,14 @@ from django.utils import timezone
 
 class TelegramUser(models.Model):
 	telegram_id = models.BigIntegerField(unique = True)
-	username = models.CharFiled(max_length =200, null = True, blank = True)
-	first_name = models.CharFiled(max_length=200, null = True, blank = True)
-	last_name =  models.CharFiled(max_length=200, null = True, blank = True)
-	language_code = models.CharFiled(max_length=10, null = True, blank = True)
-	is_bot =  models.BooleanField(defualt = False)
+	username = models.CharField(max_length =200, null = True, blank = True)
+	first_name = models.CharField(max_length=200, null = True, blank = True)
+	last_name =  models.CharField(max_length=200, null = True, blank = True)
+	language_code = models.CharField(max_length=10, null = True, blank = True)
+	is_bot =  models.BooleanField(default = False)
 	created_at = models.DateTimeField(auto_now_add = True)
-	update_at = models.DateTimeField(auto_now = True)
-	is_active = models.BooleanField(defualt = True)
+	updated_at = models.DateTimeField(auto_now = True)
+	is_active = models.BooleanField(default = True)
 	last_interaction =models.DateTimeField(auto_now = True)
 
 	def __str__(self):
@@ -29,11 +29,11 @@ class UserInteraction(models.Model):
 	]
 
 	user = models.ForeignKey(TelegramUser, on_delete= models.CASCADE, related_name = 'interaction')
-	interaction_type = models.CharField(max_length = 20, choice = INTERACTION_TYPES)
+	interaction_type = models.CharField(max_length = 20, choices = INTERACTION_TYPES)
 	command = models.CharField(max_length = 200, null = True, blank = True)
 	message_text = models.TextField(null = True, blank = True)
 	callback_data = models.CharField(max_length = 200, null = True, blank = True)
-	timestamp = models.DateTimeField(auro_now_add = True)
+	timestamp = models.DateTimeField(auto_now_add = True)
 	session_id = models.CharField(max_length = 200, null = True, blank = True)
 	def __str__(self):
 		return f"{self.user} - {self.interaction_type} - {self.timestamp}"
