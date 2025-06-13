@@ -28,7 +28,7 @@ class UserInteraction(models.Model):
 		('inline', 'Inline Query'),
 	]
 
-	user = models.ForeignKey(TelegramUser, on_delete= models.CASCADE, related_name = 'interaction')
+	user = models.ForeignKey(TelegramUser, on_delete= models.CASCADE, related_name = 'interactions')
 	interaction_type = models.CharField(max_length = 20, choices = INTERACTION_TYPES)
 	command = models.CharField(max_length = 200, null = True, blank = True)
 	message_text = models.TextField(null = True, blank = True)
@@ -43,7 +43,7 @@ class UserInteraction(models.Model):
 		ordering = ['-timestamp']
 
 class BotStatistics(models.Model):
-	date = models.DateTimeField(unique = True)
+	date = models.DateField(unique = True)
 	total_users = models.IntegerField(default = 0)
 	new_users = models.IntegerField(default = 0)
 	active_users = models.IntegerField(default = 0)
